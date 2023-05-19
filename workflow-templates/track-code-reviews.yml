@@ -4,17 +4,33 @@ on:
   issues:
     types: [opened, edited]
   pull_request:
-    types: [review_requested, review_request_removed
+    types: [review_requested]
+
+permissions:
+  issues: write
+  pull-requests: write
 
 jobs:
   run:
     if: |
-      (github.event_name == 'issue' && contains(github.event.issue.title, 'code review')) || 
-      (github.event_name == 'pull_request' && github.event.pull_request.pull_request.requested_reviewers != '[]')
+        (github.event_name == 'issues' && contains(github.event.issue.title, 'code review')) || 
+        (github.event_name == 'pull_request')
     runs-on: ubuntu-latest
     steps:
     - name: add to Code Reviews project 
-      uses: actions/add-to-project@v0.5
+      uses: actions/add-to-project@v0.5.0
       with:
         project-url: https://github.com/orgs/kreshuklab/projects/1
         github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+    - name: 'assign author'
+      uses: toshimaru/auto-author-assign@v1.6.2
+    - name: 'auto-assign reviewer for code review issue'
+      if: github.event_name == 'issues'
+      uses: pozil/auto-assign-issue@v1
+      with:
+        teams: 'code-reviewers'
+        repo-token:  ${{ secrets.ADD_TO_PROJECT_PAT }}
+        numOfAssignee: 1
+        allowSelfAssign: false
+        removePreviousAssignees: false
+        abortIfPreviousAssignees: false
