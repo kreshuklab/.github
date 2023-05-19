@@ -3,7 +3,7 @@ name: Code Review Tracker
 on: 
   issues:
     types: [opened, edited]
-  - pull_request:
+  pull_request:
     types: [review_requested, review_request_removed
 
 jobs:
