@@ -9,7 +9,7 @@ on:
 jobs:
   run:
     if: |
-      (github.event_name == 'issue' && contains(github.event.issue.title, "code review")) || 
+      (github.event_name == 'issue' && contains(github.event.issue.title, 'code review')) || 
       (github.event_name == 'pull_request' && github.event.pull_request.pull_request.requested_reviewers != '[]')
     runs-on: ubuntu-latest
     steps:
