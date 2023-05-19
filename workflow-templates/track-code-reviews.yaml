@@ -1,0 +1,20 @@
+name: Code Review Tracker
+
+on: 
+  issues:
+    types: [opened, edited]
+  - pull_request:
+    types: [review_requested, review_request_removed
+
+jobs:
+  run:
+    if: |
+      (github.event_name == 'issue' && contains(github.event.issue.title, "code review")) || 
+      (github.event_name == 'pull_request' && github.event.pull_request.pull_request.requested_reviewers != '[]')
+    runs-on: ubuntu-latest
+    steps:
+    - name: add to Code Reviews project 
+      uses: actions/add-to-project@v0.5
+        with:
+          project-url: https://github.com/orgs/kreshuklab/projects/1
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
